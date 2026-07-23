@@ -1,7 +1,9 @@
 # Dependencies and build output
 node_modules/
 .next/
+.next-stale-cache/
 .pnpm-store/
+*.tsbuildinfo
 
 # Local environment files
 .env*
