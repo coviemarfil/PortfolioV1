@@ -1,0 +1,15 @@
+# Dependencies and build output
+node_modules/
+.next/
+.pnpm-store/
+
+# Local environment files
+.env*
+!.env.example
+
+# Temporary artifacts
+tmp/
+
+# Editor and OS files
+.DS_Store
+Thumbs.db

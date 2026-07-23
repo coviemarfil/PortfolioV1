@@ -1,0 +1,4 @@
+import { skillGroups } from "@/lib/portfolio";
+import { SectionHeading } from "./SectionHeading";
+
+export function Skills() { return <section id="skills" className="py-20 sm:py-28 lg:py-32"><div className="mx-auto w-[min(100%-2rem,72rem)]"><SectionHeading id="skills-heading" label="05 / Skills" title="Tools & technologies" description="Technologies I&apos;ve used in coursework, internships, and personal projects." /><div className="mt-10 grid gap-4 md:grid-cols-2">{skillGroups.map((group) => <div key={group.title} className="flex min-h-52 flex-col rounded-xl border border-border bg-surface p-6"><h3 className="font-semibold tracking-[-0.02em]">{group.title}</h3><ul className="mt-5 flex flex-wrap content-start gap-2">{group.skills.map((skill) => <li key={skill} className="rounded-md bg-foreground/[0.04] px-2.5 py-1.5 font-mono text-xs text-muted">{skill}</li>)}</ul></div>)}</div></div></section>; }

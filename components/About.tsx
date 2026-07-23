@@ -1,0 +1,7 @@
+import { SectionHeading } from "./SectionHeading";
+
+const details = [["Education", "BS Information Technology - PLMUN (2026)"], ["GitHub", "github.com/coviemarfil"], ["LinkedIn", "linkedin.com/in/covie-marfil-367484322"], ["Email", "coviemarfil1@gmail.com"]] as const;
+
+export function About() {
+  return <section id="about" className="py-20 sm:py-28 lg:py-32"><div className="mx-auto w-[min(100%-2rem,72rem)]"><SectionHeading id="about-heading" label="02 / About" title="A bit about me" /><div className="mt-10 grid gap-10 md:grid-cols-2 md:gap-12"><div className="space-y-4 text-muted"><p>I&apos;m a Bachelor of Science in Information Technology graduate from Pamantasan ng Lungsod ng Muntinlupa. I&apos;ve built practical skills through academic projects and real work - from optimizing database systems during my OJT at Datablazers Inc. to handling high-volume customer support at IBEX Philippines.</p><p>I&apos;m looking for a role where I can apply what I&apos;ve learned in web development and database work, pick up new tools quickly, and grow with a team. I&apos;m a quick learner with strong analytical and problem-solving skills, and I care about building high-quality web applications and communicating clearly along the way.</p></div><dl className="space-y-4">{details.map(([label, value]) => <div key={label} className="border-b border-border pb-4"><dt className="font-mono text-xs uppercase tracking-[0.1em] text-subtle">{label}</dt><dd className="mt-1 text-sm text-foreground">{value}</dd></div>)}</dl></div></div></section>;
+}

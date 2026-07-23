@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root { --background: 0 0% 98%; --surface: 0 0% 100%; --foreground: 240 6% 10%; --muted: 240 4% 35%; --subtle: 240 4% 46%; --border: 240 6% 90%; }
+.dark { --background: 0 0% 4%; --surface: 0 0% 7%; --foreground: 0 0% 96%; --muted: 240 5% 64%; --subtle: 240 4% 46%; --border: 0 0% 100% / 8%; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+body { @apply bg-background font-sans text-foreground antialiased; }
+::selection { @apply bg-foreground text-background; }
+:focus-visible { @apply outline-none ring-2 ring-foreground ring-offset-4 ring-offset-background; }
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 650ms;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+::view-transition-old(root) { z-index: 1; }
+::view-transition-new(root) { z-index: 2; animation-name: theme-reveal; }
+
+@keyframes theme-reveal {
+  from { clip-path: circle(0 at var(--theme-reveal-x) var(--theme-reveal-y)); }
+  to { clip-path: circle(150vmax at var(--theme-reveal-x) var(--theme-reveal-y)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) { animation: none; }
+}
