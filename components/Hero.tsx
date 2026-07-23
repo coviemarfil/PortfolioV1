@@ -1,10 +1,11 @@
 "use client";
 
 import Image from "next/image";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Download } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useEffect, useRef, useState } from "react";
 import { socials } from "@/lib/portfolio";
+import { Button } from "./Button";
 
 type PortraitTransitionEvent = CustomEvent<{ theme: "light" | "dark" }>;
 const heroSocialOrder = ["GitHub", "LinkedIn", "Facebook"];
@@ -46,6 +47,7 @@ export function Hero() {
       <h1 className="text-5xl font-bold leading-[0.98] tracking-[-0.045em] sm:text-6xl xl:text-7xl">Covie B. Marfil</h1>
       <p className="mt-5 text-base text-muted sm:text-lg">Bachelor of Science in Information Technology Graduate</p>
       <p className="mt-6 max-w-lg text-base leading-7 text-muted">A recent IT graduate with hands-on experience from academic projects, database support, and customer-focused work. I&apos;m eager to contribute, learn quickly, and build dependable digital experiences with a collaborative team.</p>
+      <div className="mt-7"><Button href="/documents/Marfil_Covie_Resume.pdf" download><Download className="mr-2 size-4" aria-hidden="true" />Download resume</Button></div>
       <div className="mt-7 border-t border-border pt-3"><div className="flex flex-wrap gap-x-4 gap-y-1 font-mono text-[0.75rem] tracking-[0.04em] text-subtle">{heroSocialOrder.map((label) => socials.find((social) => social.label === label)).filter((social): social is (typeof socials)[number] => Boolean(social)).map((social) => <a key={social.label} className="group inline-flex min-h-10 items-center gap-1 hover:text-foreground" href={social.href} target="_blank" rel="noreferrer">{social.label}<ArrowUpRight className="size-3 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden="true" /></a>)}</div></div>
     </div><div className="relative order-first mx-auto aspect-square w-[min(86vw,22rem)] overflow-hidden rounded-[1.5rem] border border-border bg-surface p-2 shadow-2xl shadow-black/10 transition-transform duration-500 dark:bg-zinc-900 motion-safe:animate-fade-up motion-safe:[animation-delay:120ms] sm:w-96 lg:order-none lg:justify-self-end lg:w-[28rem] lg:hover:-translate-y-1">
       <div className="absolute inset-1 overflow-hidden rounded-[1.125rem] outline outline-1 outline-border/80">
