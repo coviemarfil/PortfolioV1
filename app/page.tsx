@@ -4,11 +4,13 @@ import { Contact } from "@/components/Contact";
 import { Experience } from "@/components/Experience";
 import { Footer } from "@/components/Footer";
 import { Hero } from "@/components/Hero";
+import { LoadingScreen } from "@/components/LoadingScreen";
+import { TransitionMediaProvider } from "@/components/TransitionMedia";
 import { Navbar } from "@/components/Navbar";
 import { Projects } from "@/components/Projects";
 import { Skills } from "@/components/Skills";
 import { ThemeProvider } from "@/components/ThemeProvider";
 
 export default function HomePage() {
-  return <ThemeProvider><AssetWarmup /><Navbar /><div className="lg:pl-72"><main><Hero /><About /><Projects /><Experience /><Skills /><Contact /></main><Footer /></div></ThemeProvider>;
+  return <ThemeProvider><TransitionMediaProvider><LoadingScreen /><AssetWarmup /><Navbar /><div className="lg:pl-72"><main><Hero /><About /><Projects /><Experience /><Skills /><Contact /></main><Footer /></div></TransitionMediaProvider></ThemeProvider>;
 }

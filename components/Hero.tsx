@@ -6,20 +6,22 @@ import { useTheme } from "next-themes";
 import { useEffect, useRef, useState } from "react";
 import { socials } from "@/lib/portfolio";
 import { Button } from "./Button";
+import { useTransitionMedia, type ThemeName } from "./TransitionMedia";
 
-type PortraitTransitionEvent = CustomEvent<{ theme: "light" | "dark" }>;
+type PortraitTransitionEvent = CustomEvent<{ theme: ThemeName }>;
 const heroSocialOrder = ["GitHub", "LinkedIn", "Facebook"];
 
 export function Hero() {
   const { resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
-  const [videoSource, setVideoSource] = useState<string | null>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const readyTransitions = useRef({ light: false, dark: false });
+  const [playingTheme, setPlayingTheme] = useState<ThemeName | null>(null);
+  const lightVideoRef = useRef<HTMLVideoElement>(null);
+  const darkVideoRef = useRef<HTMLVideoElement>(null);
+  const { markFailed, markLoaded, markPlayable } = useTransitionMedia();
   const isDark = mounted ? resolvedTheme !== "light" : true;
 
   const finishVideo = () => {
-    setVideoSource(null);
+    setPlayingTheme(null);
     window.dispatchEvent(new Event("portrait-transition-end"));
   };
 
@@ -27,23 +29,19 @@ export function Hero() {
     setMounted(true);
     const startVideo = (event: Event) => {
       const { theme } = (event as PortraitTransitionEvent).detail;
-      if (!readyTransitions.current[theme]) {
-        window.dispatchEvent(new Event("portrait-transition-end"));
+      const video = theme === "dark" ? darkVideoRef.current : lightVideoRef.current;
+      if (!video) {
+        finishVideo();
         return;
       }
-      setVideoSource(theme === "dark" ? "/media/shades-on.mp4" : "/media/shades-off.mp4");
+      video.currentTime = 0;
+      video.playbackRate = 1.15;
+      setPlayingTheme(theme);
+      requestAnimationFrame(() => void video.play().catch(finishVideo));
     };
     window.addEventListener("portrait-theme-transition", startVideo);
     return () => window.removeEventListener("portrait-theme-transition", startVideo);
   }, []);
-
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video || !videoSource) return;
-    video.currentTime = 0;
-    video.playbackRate = 1.15;
-    void video.play().catch(finishVideo);
-  }, [videoSource]);
 
   return <section id="hero" className="relative flex min-h-svh items-center overflow-hidden pt-[4.5rem] lg:pt-0">
     <div aria-hidden="true" className="absolute -right-16 -top-16 size-[min(52vw,30rem)] opacity-[0.24] [background-image:radial-gradient(hsl(var(--foreground))_0.9px,transparent_0.9px)] [background-size:8px_8px] [mask-image:radial-gradient(ellipse_at_center,black_20%,transparent_70%)]" />
@@ -57,8 +55,9 @@ export function Hero() {
     </div><div className="relative order-first mx-auto aspect-square w-[min(86vw,22rem)] overflow-hidden rounded-[1.5rem] border border-border bg-surface p-2 shadow-2xl shadow-black/10 transition-transform duration-500 dark:bg-zinc-900 motion-safe:animate-fade-up motion-safe:[animation-delay:120ms] sm:w-96 lg:order-none lg:justify-self-end lg:w-[28rem] lg:hover:-translate-y-1">
       <div className="absolute inset-1 overflow-hidden rounded-[1.125rem] outline outline-1 outline-border/80">
         <Image src={isDark ? "/media/portrait-dark.jpg" : "/media/portrait-light.jpg"} alt={isDark ? "Covie Marfil wearing sunglasses" : "Covie Marfil in graduation attire"} fill priority sizes="(min-width: 1024px) 28rem, (min-width: 640px) 24rem, 22rem" className="scale-[1.15] object-cover object-[center_45%]" />
-        {videoSource && <video ref={videoRef} src={videoSource} muted playsInline preload="auto" onEnded={finishVideo} onError={finishVideo} className="absolute inset-0 z-10 size-full scale-[1.15] object-cover object-[center_45%]" />}
+        <video ref={lightVideoRef} src="/media/shades-off.mp4" muted playsInline preload="auto" onLoadedData={() => markLoaded("light")} onCanPlay={() => markPlayable("light")} onError={() => markFailed("light")} onEnded={finishVideo} className={`absolute inset-0 z-10 size-full scale-[1.15] object-cover object-[center_45%] ${playingTheme === "light" ? "opacity-100" : "pointer-events-none opacity-0"}`} />
+        <video ref={darkVideoRef} src="/media/shades-on.mp4" muted playsInline preload="auto" onLoadedData={() => markLoaded("dark")} onCanPlay={() => markPlayable("dark")} onError={() => markFailed("dark")} onEnded={finishVideo} className={`absolute inset-0 z-10 size-full scale-[1.15] object-cover object-[center_45%] ${playingTheme === "dark" ? "opacity-100" : "pointer-events-none opacity-0"}`} />
       </div>
-    </div><div className="hidden" aria-hidden="true"><video preload="auto" muted playsInline src="/media/shades-on.mp4" onCanPlayThrough={() => { readyTransitions.current.dark = true; }} onError={() => { readyTransitions.current.dark = false; }} /><video preload="auto" muted playsInline src="/media/shades-off.mp4" onCanPlayThrough={() => { readyTransitions.current.light = true; }} onError={() => { readyTransitions.current.light = false; }} /></div></div>
+    </div></div>
   </section>;
 }

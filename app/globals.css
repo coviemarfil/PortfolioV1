@@ -23,6 +23,13 @@ body { @apply bg-background font-sans text-foreground antialiased; }
   to { clip-path: circle(150vmax at var(--theme-reveal-x) var(--theme-reveal-y)); }
 }
 
+@keyframes loader {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(200%); }
+}
+
+.animate-loader { animation: loader 1.1s ease-in-out infinite; }
+
 @media (prefers-reduced-motion: reduce) {
   ::view-transition-old(root),
   ::view-transition-new(root) { animation: none; }
