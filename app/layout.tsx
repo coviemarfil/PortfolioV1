@@ -16,5 +16,14 @@ export const viewport: Viewport = {
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="en" suppressHydrationWarning><body className={`${geist.variable} ${geistMono.variable}`}>{children}</body></html>;
+  return <html lang="en" suppressHydrationWarning>
+    <head>
+      {/* Keep the theme transition instant; the gallery is warmed after the page has loaded. */}
+      <link rel="preload" href="/media/portrait-light.jpg" as="image" />
+      <link rel="preload" href="/media/portrait-dark.jpg" as="image" />
+      <link rel="preload" href="/media/shades-on.mp4" as="video" type="video/mp4" />
+      <link rel="preload" href="/media/shades-off.mp4" as="video" type="video/mp4" />
+    </head>
+    <body className={`${geist.variable} ${geistMono.variable}`}>{children}</body>
+  </html>;
 }

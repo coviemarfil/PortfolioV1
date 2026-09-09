@@ -15,6 +15,7 @@ export function Hero() {
   const [mounted, setMounted] = useState(false);
   const [videoSource, setVideoSource] = useState<string | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const readyTransitions = useRef({ light: false, dark: false });
   const isDark = mounted ? resolvedTheme !== "light" : true;
 
   const finishVideo = () => {
@@ -26,6 +27,10 @@ export function Hero() {
     setMounted(true);
     const startVideo = (event: Event) => {
       const { theme } = (event as PortraitTransitionEvent).detail;
+      if (!readyTransitions.current[theme]) {
+        window.dispatchEvent(new Event("portrait-transition-end"));
+        return;
+      }
       setVideoSource(theme === "dark" ? "/media/shades-on.mp4" : "/media/shades-off.mp4");
     };
     window.addEventListener("portrait-theme-transition", startVideo);
@@ -54,6 +59,6 @@ export function Hero() {
         <Image src={isDark ? "/media/portrait-dark.jpg" : "/media/portrait-light.jpg"} alt={isDark ? "Covie Marfil wearing sunglasses" : "Covie Marfil in graduation attire"} fill priority sizes="(min-width: 1024px) 28rem, (min-width: 640px) 24rem, 22rem" className="scale-[1.15] object-cover object-[center_45%]" />
         {videoSource && <video ref={videoRef} src={videoSource} muted playsInline preload="auto" onEnded={finishVideo} onError={finishVideo} className="absolute inset-0 z-10 size-full scale-[1.15] object-cover object-[center_45%]" />}
       </div>
-    </div><div className="hidden" aria-hidden="true"><video preload="auto" muted playsInline src="/media/shades-on.mp4" /><video preload="auto" muted playsInline src="/media/shades-off.mp4" /></div></div>
+    </div><div className="hidden" aria-hidden="true"><video preload="auto" muted playsInline src="/media/shades-on.mp4" onCanPlayThrough={() => { readyTransitions.current.dark = true; }} onError={() => { readyTransitions.current.dark = false; }} /><video preload="auto" muted playsInline src="/media/shades-off.mp4" onCanPlayThrough={() => { readyTransitions.current.light = true; }} onError={() => { readyTransitions.current.light = false; }} /></div></div>
   </section>;
 }

@@ -33,7 +33,7 @@ export function Projects() {
             return <Card key={project.title} className="flex h-full flex-col">
               {hasScreenshots && <div className="relative mb-5 overflow-hidden rounded-lg border border-border bg-background" style={{ height: "9rem" }}>
                 <button type="button" onClick={openGallery} className="absolute inset-0 z-0 cursor-zoom-in" aria-label={`Open ${project.title} screenshot gallery`}>
-                  <img src={screenshot} alt={`${project.title} screenshot ${activeScreenshot + 1} of ${project.screenshots.length}`} className="size-full object-contain" />
+                  <img src={screenshot} alt={`${project.title} screenshot ${activeScreenshot + 1} of ${project.screenshots.length}`} loading="lazy" className="size-full object-contain" />
                 </button>
                 {project.screenshots.length > 1 && <>
                   <button type="button" onClick={() => changeScreenshot(project.title, project.screenshots.length, -1)} className="absolute left-2 top-1/2 z-10 inline-flex size-8 -translate-y-1/2 items-center justify-center rounded-full border border-border bg-surface/95 text-foreground shadow-sm transition hover:bg-foreground hover:text-background" aria-label="Show previous screenshot"><ArrowLeft className="size-4" aria-hidden="true" /></button>
