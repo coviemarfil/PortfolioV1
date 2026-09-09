@@ -3,9 +3,12 @@
 @tailwind utilities;
 
 :root { --background: 0 0% 98%; --surface: 0 0% 100%; --foreground: 240 6% 10%; --muted: 240 4% 35%; --subtle: 240 4% 46%; --border: 240 6% 90%; }
+@media (prefers-color-scheme: dark) { :root:not(.light) { --background: 0 0% 4%; --surface: 0 0% 7%; --foreground: 0 0% 96%; --muted: 240 5% 64%; --subtle: 240 4% 46%; --border: 0 0% 100% / 8%; } }
 .dark { --background: 0 0% 4%; --surface: 0 0% 7%; --foreground: 0 0% 96%; --muted: 240 5% 64%; --subtle: 240 4% 46%; --border: 0 0% 100% / 8%; }
 html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 body { @apply bg-background font-sans text-foreground antialiased; }
+html { color-scheme: light; }
+html.dark { color-scheme: dark; }
 ::selection { @apply bg-foreground text-background; }
 :focus-visible { @apply outline-none ring-2 ring-foreground ring-offset-4 ring-offset-background; }
 
@@ -22,13 +25,6 @@ body { @apply bg-background font-sans text-foreground antialiased; }
   from { clip-path: circle(0 at var(--theme-reveal-x) var(--theme-reveal-y)); }
   to { clip-path: circle(150vmax at var(--theme-reveal-x) var(--theme-reveal-y)); }
 }
-
-@keyframes loader {
-  from { transform: translateX(-100%); }
-  to { transform: translateX(200%); }
-}
-
-.animate-loader { animation: loader 1.1s ease-in-out infinite; }
 
 @media (prefers-reduced-motion: reduce) {
   ::view-transition-old(root),
